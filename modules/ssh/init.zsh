@@ -14,7 +14,11 @@ fi
 _ssh_dir="$HOME/.ssh"
 
 # Set the path to the environment file if not set by another module.
-_ssh_agent_env="${_ssh_agent_env:-${XDG_CACHE_HOME:-$HOME/.cache}/prezto/ssh-agent.env}"
+if [[ $(uname -s) =~ '^CYGWIN' ]]; then
+  _ssh_agent_env="${_ssh_agent_env:-${TMPDIR:-/tmp}/ssh-agent.env.$LOGNAME}"
+else
+  _ssh_agent_env="${_ssh_agent_env:-${XDG_CACHE_HOME:-$HOME/.cache}/prezto/ssh-agent.env}"
+fi
 
 # Set the path to the persistent authentication socket if not set by another module.
 _ssh_agent_sock="${_ssh_agent_sock:-${XDG_CACHE_HOME:-$HOME/.cache}/prezto/ssh-agent.sock}"
@@ -22,16 +26,15 @@ _ssh_agent_sock="${_ssh_agent_sock:-${XDG_CACHE_HOME:-$HOME/.cache}/prezto/ssh-a
 # Start ssh-agent if not started.
 if [[ ! -S "$SSH_AUTH_SOCK" ]]; then
   # Export environment variables.
-  source "$_ssh_agent_env" 2> /dev/null
+  source "$_ssh_agent_env" 1> /dev/null 2>&1
 
   # Start ssh-agent if not started.
   if [[ $(uname -s) =~ '^CYGWIN' ]]; then
-    if ! ps -u "$LOGNAME" | grep -q -- "${SSH_AGENT_PID:--1} ssh-agent"; then
-      mkdir -p "$_ssh_agent_env:h"
+    if ! ps -u "$USERNAME" | grep -q -- "${SSH_AGENT_PID:--1}.*ssh-agent"; then
       eval "$(ssh-agent | sed '/^echo /d' | tee "$_ssh_agent_env")"
     fi
   else
-    if ! ps -U "$LOGNAME" -o pid,ucomm | grep -q -- "${SSH_AGENT_PID:--1} ssh-agent"; then
+    if ! ps -u "$LOGNAME" | grep -q -- "${SSH_AGENT_PID:--1} ssh-agent"; then
       mkdir -p "$_ssh_agent_env:h"
       eval "$(ssh-agent | sed '/^echo /d' | tee "$_ssh_agent_env")"
     fi
