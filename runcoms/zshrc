@@ -5,6 +5,7 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
+# Source local changes first so we may influence Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zrclocal" ]]; then
   source "${ZDOTDIR:-$HOME}/.zrclocal"
 fi
