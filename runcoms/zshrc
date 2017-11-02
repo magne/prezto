@@ -16,3 +16,7 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # Customize to your needs...
+if which dotnet > /dev/null; then
+    alias dot-rm='find . -type d \( -name obj -o -name bin \) -exec rm -rf {} +'
+    alias dot-test='for f in $(find . -type f -name "*.Tests.csproj"); do dotnet test -f netcoreapp2.0 --no-build $f; done'
+fi
