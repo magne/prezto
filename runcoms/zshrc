@@ -21,5 +21,5 @@ if which dotnet > /dev/null; then
     alias dot-test='for f in $(find . -type f -name "*.Tests.csproj"); do dotnet test -f netcoreapp2.0 --no-build $f; done'
 fi
 
-if [ /snap/bin/kubectl ]; then source <(kubectl completion zsh); fi
-if [ /snap/bin/helm ]; then source <(helm completion zsh); fi
+which kubectl 2>&1  > /dev/null && source <(kubectl completion zsh)
+which helm 2>&1 > /dev/null && source <(helm completion zsh)
