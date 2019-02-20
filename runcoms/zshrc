@@ -15,6 +15,8 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
+alias ducks='du -hsx * | sort -rh | head -10'
+
 # Customize to your needs...
 if which dotnet > /dev/null; then
     alias dot-rm='find . -type d \( -name obj -o -name bin \) -exec rm -rf {} +'
