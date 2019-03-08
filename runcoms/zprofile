@@ -65,6 +65,7 @@ path=(
 )
 [ -d "$HOME/.yarn/bin" ] && path=("$HOME/.yarn/bin" "$path[@]")
 [ -d "$HOME/go/bin" ] && path=("$HOME/go/bin" "$path[@]")
+[ -d "/usr/local/go/bin" ] && path=("/usr/local/go/bin" "$path[@]")
 [ -d "$HOME/bin" ] && path=("$HOME/bin" "$path[@]")
 
 
