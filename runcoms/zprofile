@@ -63,6 +63,7 @@ path=(
   /usr/local/{,s}bin(N)
   $path
 )
+[ -d "$HOME/.dotnet/tools" ] && path=("$HOME/.dotnet/tools" "$path[@]")
 [ -d "$HOME/.yarn/bin" ] && path=("$HOME/.yarn/bin" "$path[@]")
 [ -d "$HOME/go/bin" ] && path=("$HOME/go/bin" "$path[@]")
 [ -d "/usr/local/go/bin" ] && path=("/usr/local/go/bin" "$path[@]")
