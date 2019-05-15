@@ -39,10 +39,10 @@ zstyle ':prezto:load' pmodule \
   'utility' \
   'git' \
   'dpkg' \
-  'node' \
   'tmux' \
   'ssh' \
   'completion' \
+  'node' \
   'syntax-highlighting' \
   'history-substring-search' \
   'prompt'
