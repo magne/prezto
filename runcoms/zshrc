@@ -18,6 +18,7 @@ fi
 #alias ducks='du -hxd1 | sort -rh | head -10'
 alias ducks='find . -maxdepth 1 -type d | grep -v ''^.$'' | sed -e ''s|^\./||g'' | xargs du -hxs | sort -rh | head -10'
 alias yw='yarn workspace'
+alias reset-stderr='exec >&0 2>&1'
 
 # Customize to your needs...
 if which dotnet > /dev/null; then
