@@ -8,7 +8,7 @@
 #
 
 # Return if requirements are not found.
-if (( ! $+commands[dpkg] && ! $+commands[apt-get] )); then
+if (( ! $+commands[dpkg] && ! $+commands[apt] )); then
   return 1
 fi
 
@@ -17,37 +17,37 @@ fi
 #
 
 # Cleans the cache.
-alias debc='sudo apt-get clean && sudo apt-get autoclean'
+alias debc='sudo apt clean && sudo apt autoclean'
 
 # Displays a file's package.
 alias debf='apt-file search --regexp'
 
 # Installs packages from repositories.
-alias debi='sudo apt-get install'
+alias debi='sudo apt install'
 
 # Installs packages from files.
 alias debI='sudo dpkg -i'
 
 # Displays package information.
-alias debq='apt-cache show'
+alias debq='apt show'
 
 # Updates the package lists.
-alias debu='sudo apt-get update'
+alias debu='sudo apt update'
 
 # Upgrades outdated packages.
-alias debU='sudo apt-get update && sudo apt-get dist-upgrade'
+alias debU='sudo apt update && sudo apt full-upgrade'
 
 # Removes packages.
-alias debx='sudo apt-get remove'
+alias debx='sudo apt remove'
 
 # Removes packages, their configuration, and unneeded dependencies.
-alias debX='sudo apt-get remove --purge && sudo apt-get autoremove --purge'
+alias debX='sudo apt remove --purge && sudo apt autoremove --purge'
 
 # Searches for packages.
 if (( $+commands[aptitude] )); then
   alias debs='aptitude -F "* %p -> %d \n(%v/%V)" --no-gui --disable-columns search'
 else
-  alias debs='apt-cache search'
+  alias debs='apt search'
 fi
 
 # Creates a basic deb package.
