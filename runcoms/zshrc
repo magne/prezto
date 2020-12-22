@@ -10,6 +10,11 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zrclocal" ]]; then
   source "${ZDOTDIR:-$HOME}/.zrclocal"
 fi
 
+if [ -x /usr/bin/keychain ]; then
+    /usr/bin/keychain --nogui $HOME/.ssh/id_ed25519 $HOME/.ssh/id_rsa $HOME/.ssh/id_rsa_legacy
+    source $HOME/.keychain/$(hostname)-sh
+fi
+
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
@@ -31,3 +36,5 @@ which kubectl 2>&1  > /dev/null && source <(kubectl completion zsh)
 which helm 2>&1 > /dev/null && source <(helm completion zsh)
 
 export N_PREFIX="$HOME/opt/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
+
+export PATH=$(echo $PATH | tr ':' '\n' | grep -v '^/mnt/c/' | tr '\n' ':')
