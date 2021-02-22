@@ -24,12 +24,17 @@ fi
 alias ducks='find . -maxdepth 1 -type d | grep -v ''^.$'' | sed -e ''s|^\./||g'' | xargs du -hxs | sort -rh | head -10'
 alias yw='yarn workspace'
 alias reset-stderr='exec >&0 2>&1'
+alias git-local-prune='git branch -r | awk ''{print $1}'' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk ''{print $1}'' | xargs -r git branch -d'
 
 # Customize to your needs...
 if which dotnet > /dev/null; then
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
     alias dot-rm='find . -type d \( -name obj -o -name bin \) -exec rm -rf {} +'
     alias dot-test='for f in $(find . -type f -name "*.Tests.csproj"); do dotnet test -f netcoreapp2.0 --no-build $f; done'
+fi
+
+if which func > /dev/null; then
+    export FUNCTIONS_CORE_TOOLS_TELEMETRY_OPTOUT=1
 fi
 
 which kubectl 2>&1  > /dev/null && source <(kubectl completion zsh)
