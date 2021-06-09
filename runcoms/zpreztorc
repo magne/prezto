@@ -41,8 +41,9 @@ zstyle ':prezto:load' pmodule \
   'dpkg' \
   'tmux' \
   'ssh' \
-  'completion' \
   'node' \
+  'python' \
+  'completion' \
   'syntax-highlighting' \
   'history-substring-search' \
   'prompt'
