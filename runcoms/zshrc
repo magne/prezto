@@ -43,3 +43,7 @@ which helm 2>&1 > /dev/null && source <(helm completion zsh)
 export N_PREFIX="$HOME/opt/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
 
 export PATH=$(echo $PATH | tr ':' '\n' | grep -v '^/mnt/c/' | tr '\n' ':')
+
+if [ -x /usr/local/bin/starship ]; then
+  eval "$(starship init zsh)"
+fi
