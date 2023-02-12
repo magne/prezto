@@ -47,3 +47,8 @@ export PATH=$(echo $PATH | tr ':' '\n' | grep -v '^/mnt/c/' | tr '\n' ':')
 if [ -x /usr/local/bin/starship ]; then
   eval "$(starship init zsh)"
 fi
+
+# pnpm
+export PNPM_HOME="/home/magne/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end
