@@ -68,6 +68,7 @@ path=(
 [ -d "$HOME/.dotnet/tools" ] && path=("$HOME/.dotnet/tools" "$path[@]")
 [ -d "$HOME/.yarn/bin" ] && path=("$HOME/.yarn/bin" "$path[@]")
 [ -s "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+[ -s "$HOME/.go/env" ] && source "$HOME/.go/env"
 [ -d "$HOME/go/bin" ] && path=("$HOME/go/bin" "$path[@]")
 [ -d "$HOME/bin" ] && path=("$HOME/bin" "$path[@]")
 [ -d "$HOME/.local/bin" ] && path=("$HOME/.local/bin" "$path[@]")
@@ -119,3 +120,4 @@ snap_xdg_path="/var/lib/snapd/desktop"
 if [ -n "${XDG_DATA_DIRS##*${snap_xdg_path}}" -a -n "${XDG_DATA_DIRS##*${snap_xdg_path}:*}" ]; then
     export XDG_DATA_DIRS="${XDG_DATA_DIRS}:${snap_xdg_path}"
 fi
+
