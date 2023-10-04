@@ -21,7 +21,7 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 #alias ducks='du -hxd1 | sort -rh | head -10'
-alias ducks='find . -maxdepth 1 -type d | grep -v ''^.$'' | sed -e ''s|^\./||g'' | xargs du -hxs | sort -rh | head -10'
+alias ducks='find . -maxdepth 1 -type d | grep -v ''^.$'' | sed -e ''s|^\./||g'' | xargs -d ''\n'' du -hxs | sort -rh | head -10'
 alias yw='yarn workspace'
 alias reset-stderr='exec >&0 2>&1'
 alias git-local-prune='git branch -r | awk ''{print $1}'' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk ''{print $1}'' | xargs -r git branch -d'
@@ -37,10 +37,14 @@ if which func > /dev/null; then
     export FUNCTIONS_CORE_TOOLS_TELEMETRY_OPTOUT=1
 fi
 
+if which aws > /dev/null; then
+  alias aws_login='aws=$($HOME/development/corporater/iac.bootstrap/scripts/aws-cli-mfa-session.sh magne.rasmussen@corporater.com) && if eval "$aws"; then kitty --session dev.session &; exit 0; fi'
+fi
+
 which kubectl 2>&1  > /dev/null && source <(kubectl completion zsh)
 which helm 2>&1 > /dev/null && source <(helm completion zsh)
 
-export N_PREFIX="$HOME/opt/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
+export N_PREFIX="$HOME/opt/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || path=("$N_PREFIX/bin" $path)  # Added by n-install (see http://git.io/n-install-repo).
 
 export PATH=$(echo $PATH | tr ':' '\n' | grep -v '^/mnt/c/' | tr '\n' ':')
 

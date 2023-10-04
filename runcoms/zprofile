@@ -48,7 +48,7 @@ typeset -gU cdpath fpath mailpath path
 # )
 
 # Set the list of directories that zcompdump searches
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/functions" ]]; then
+if [[ -d "${ZDOTDIR:-$HOME}/.zprezto/functions" ]]; then
   fpath=(
     "${ZDOTDIR:-$HOME}/.zprezto/functions"
     $fpath
