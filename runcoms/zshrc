@@ -25,6 +25,7 @@ alias ducks='find . -maxdepth 1 -type d | grep -v ''^.$'' | sed -e ''s|^\./||g''
 alias yw='yarn workspace'
 alias reset-stderr='exec >&0 2>&1'
 alias git-local-prune='git branch -r | awk ''{print $1}'' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk ''{print $1}'' | xargs -r git branch -d'
+alias clear-autocomplete-cache='rm -rf ~/.zcompdump ~/.cache/prezto/zcompcache ~/.cache/prezto/zcompdump ~/.cache/prezto/zcompdump.zwc'
 
 # Customize to your needs...
 if which dotnet > /dev/null; then
@@ -38,7 +39,14 @@ if which func > /dev/null; then
 fi
 
 if which aws > /dev/null; then
-  alias aws_login='aws=$($HOME/development/corporater/iac.bootstrap/scripts/aws-cli-mfa-session.sh magne.rasmussen@corporater.com) && if eval "$aws"; then kitty --session dev.session &; exit 0; fi'
+    aws_login () {
+        aws=$($HOME/development/corporater/iac.bootstrap/scripts/aws-cli-mfa-session.sh magne.rasmussen@corporater.com) && if eval "$aws"; then SHLVL=0 exec kitty --session dev.session &; exit; fi
+    }
+    if which aws_completer > /dev/null; then
+        autoload bashcompinit && bashcompinit
+        autoload -Uz compinit && compinit
+        complete -C aws_completer aws
+    fi
 fi
 
 which kubectl 2>&1  > /dev/null && source <(kubectl completion zsh)
