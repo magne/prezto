@@ -66,3 +66,10 @@ if [ -d "$HOME/.local/share/pnpm" ]; then
     path=("$PNPM_HOME" "$path[@]")
 fi
 # pnpm end
+
+# proto
+if [ -d "$HOME/.proto" ]; then
+    export PROTO_HOME="$HOME/.proto"
+    path=("$PROTO_HOME/shims" "$PROTO_HOME/bin" "$path[@]")
+fi
+# proto end
