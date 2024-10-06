@@ -52,7 +52,10 @@ fi
 which kubectl 2>&1  > /dev/null && source <(kubectl completion zsh)
 which helm 2>&1 > /dev/null && source <(helm completion zsh)
 
-export N_PREFIX="$HOME/opt/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || path=("$N_PREFIX/bin" $path)  # Added by n-install (see http://git.io/n-install-repo).
+if [ -d "$HOME/opt/n" ]; then
+    export N_PREFIX="$HOME/opt/n" 
+    [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || path=("$N_PREFIX/bin" $path)
+fi
 
 export PATH=$(echo $PATH | tr ':' '\n' | grep -v '^/mnt/c/' | tr '\n' ':')
 
@@ -67,9 +70,17 @@ if [ -d "$HOME/.local/share/pnpm" ]; then
 fi
 # pnpm end
 
+# bob
+if [ -d "$HOME/.local/share/bob/nvim-bin" ]; then
+    path=("$HOME/.local/share/bob/nvim-bin" "$path[@]")
+fi
+# bob end
+
 # proto
 if [ -d "$HOME/.proto" ]; then
     export PROTO_HOME="$HOME/.proto"
     path=("$PROTO_HOME/shims" "$PROTO_HOME/bin" "$path[@]")
+    eval "$(proto activate zsh)"
 fi
 # proto end
+
