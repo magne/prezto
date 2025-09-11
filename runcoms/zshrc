@@ -40,7 +40,8 @@ fi
 
 if which aws > /dev/null; then
     aws_login () {
-        aws=$($HOME/development/corporater/iac.bootstrap/scripts/aws-cli-mfa-session.sh magne.rasmussen@corporater.com) && if eval "$aws"; then SHLVL=0 exec kitty --session dev.session &; exit; fi
+        # aws=$($HOME/development/corporater/iac.bootstrap/scripts/aws-cli-mfa-session.sh magne.rasmussen@corporater.com) && if eval "$aws"; then SHLVL=0 exec kitty --session dev.session &; exit; fi
+        aws=$($HOME/development/corporater/iac.bootstrap/scripts/aws-cli-mfa-session.sh magne.rasmussen@corporater.com) && if eval "$aws"; then SHLVL=0 exec ghostty &; exit; fi
     }
     if which aws_completer > /dev/null; then
         autoload bashcompinit && bashcompinit
