@@ -15,6 +15,8 @@ if [ -x /usr/bin/keychain ]; then
     source $HOME/.keychain/$(hostname)-sh
 fi
 
+set KEYTIMEOUT=100
+
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
@@ -24,7 +26,7 @@ fi
 alias ducks='find . -maxdepth 1 -type d | grep -v ''^.$'' | sed -e ''s|^\./||g'' | xargs -d ''\n'' du -hxs | sort -rh | head -10'
 alias yw='yarn workspace'
 alias reset-stderr='exec >&0 2>&1'
-alias git-local-prune='git branch -r | awk ''{print $1}'' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk ''{print $1}'' | xargs -r git branch -d'
+alias git-local-prune="git branch -vv | awk '/: gone]/ {print (\$1==\"*\" || \$1==\"+\") ? \$2 : \$1}' | xargs -r git branch -d"
 alias clear-autocomplete-cache='rm -rf ~/.zcompdump ~/.cache/prezto/zcompcache ~/.cache/prezto/zcompdump ~/.cache/prezto/zcompdump.zwc'
 
 # Customize to your needs...
@@ -43,6 +45,9 @@ if which aws > /dev/null; then
         # aws=$($HOME/development/corporater/iac.bootstrap/scripts/aws-cli-mfa-session.sh magne.rasmussen@corporater.com) && if eval "$aws"; then SHLVL=0 exec kitty --session dev.session &; exit; fi
         aws=$($HOME/development/corporater/iac.bootstrap/scripts/aws-cli-mfa-session.sh magne.rasmussen@corporater.com) && if eval "$aws"; then SHLVL=0 exec ghostty &; exit; fi
     }
+     aws_login_kitty () {
+        aws=$($HOME/development/corporater/iac.bootstrap/scripts/aws-cli-mfa-session.sh magne.rasmussen@corporater.com) && if eval "$aws"; then SHLVL=0 exec kitty &; exit; fi
+    }
     if which aws_completer > /dev/null; then
         autoload bashcompinit && bashcompinit
         autoload -Uz compinit && compinit
@@ -52,6 +57,26 @@ fi
 
 which kubectl 2>&1  > /dev/null && source <(kubectl completion zsh)
 which helm 2>&1 > /dev/null && source <(helm completion zsh)
+if which batcat 2>&1 > /dev/null; then
+    alias bat=batcat
+    export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
+    export MANROFFOPT="-c"
+fi
+
+# Preview file content using bat (https://github.com/sharkdp/bat)
+export FZF_CTRL_T_OPTS="
+  --walker-skip .git,node_modules,target
+  --preview 'batcat -n --color=always {}'
+  --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+
+# Print tree structure in the preview window
+export FZF_ALT_C_OPTS="
+  --walker-skip .git,node_modules,target
+  --preview 'tree -C {}'"
+
+if [ -e "$HOME/.zprezto/runcoms/fzf-git.sh" ]; then
+    source "$HOME/.zprezto/runcoms/fzf-git.sh"
+fi
 
 if [ -d "$HOME/opt/n" ]; then
     export N_PREFIX="$HOME/opt/n" 
@@ -61,13 +86,16 @@ fi
 export PATH=$(echo $PATH | tr ':' '\n' | grep -v '^/mnt/c/' | tr '\n' ':')
 
 if [ -x /usr/local/bin/starship ]; then
-  eval "$(starship init zsh)"
+    eval "$(starship init zsh)"
 fi
 
 # pnpm
 if [ -d "$HOME/.local/share/pnpm" ]; then
     export PNPM_HOME="$HOME/.local/share/pnpm"
-    path=("$PNPM_HOME" "$path[@]")
+    case ":$PATH:" in
+        *":$PNPM_HOME/bin:"*) ;;
+        *) path=("$PNPM_HOME/bin" "$path[@]") ;;
+    esac
 fi
 # pnpm end
 
@@ -85,3 +113,30 @@ if [ -d "$HOME/.proto" ]; then
 fi
 # proto end
 
+which fzf 2>&1 > /dev/null && source <(fzf --zsh)
+
+# AsyncAPI CLI Autocomplete
+
+ASYNCAPI_AC_ZSH_SETUP_PATH=/home/magne/.cache/@asyncapi/cli/autocomplete/zsh_setup && test -f $ASYNCAPI_AC_ZSH_SETUP_PATH && source $ASYNCAPI_AC_ZSH_SETUP_PATH; # asyncapi autocomplete setup
+
+
+
+# bun completions
+[ -s "/home/magne/.bun/_bun" ] && source "/home/magne/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/magne/.local/bin:$PATH"
+
+# cargo (also in .zprofile, but non-login shells such as Claude Code's only read .zshrc)
+[ -s "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+
+if [ -S ~/.ssh/socket ]; then
+    eval $(ssh-agent)
+    ln -sf "$SSH_AUTH_SOCK" ~/.ssh/socket
+    export SSH_AUTH_SOCK=~/.ssh/socket
+fi

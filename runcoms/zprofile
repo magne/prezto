@@ -121,3 +121,7 @@ if [ -n "${XDG_DATA_DIRS##*${snap_xdg_path}}" -a -n "${XDG_DATA_DIRS##*${snap_xd
     export XDG_DATA_DIRS="${XDG_DATA_DIRS}:${snap_xdg_path}"
 fi
 
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/magne/.local/bin:$PATH"
